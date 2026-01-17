@@ -30,89 +30,92 @@ const ModeIcon = ({ id, active }: { id: MainMode, active: boolean }) => {
   }
 }
 
-const MODULE_GROUPS: Record<MainMode, Record<string, { id: SubModule; label: string; icon?: (cn: string) => React.ReactNode }[]>> = {
+const MODULE_GROUPS: Record<MainMode, Record<string, { id: SubModule; label: string; icon?: string }[]>> = {
   RESEARCH: {
     "CORE INSIGHTS": [
-      { id: 'EXECUTIVE_DASHBOARD', label: 'EXECUTIVE DASHBOARD' },
-      { id: 'TRANSFORMATION_BLUEPRINT', label: 'SYSTEM OVERVIEW' },
-      { id: 'USER_GUIDE', label: 'SYSTEM MANUAL' },
-      { id: 'MARKET_DISCOVERY', label: 'GENERATE LEADS' },
-      { id: 'INTELLIGENCE_SCAN', label: 'INTELLIGENCE SCAN' },
-      { id: 'MARKET_TRENDS', label: 'MARKET TRENDS' },
+      { id: 'EXECUTIVE_DASHBOARD', label: 'EXECUTIVE DASHBOARD', icon: 'home' },
+      { id: 'TRANSFORMATION_BLUEPRINT', label: 'SYSTEM OVERVIEW', icon: 'blueprint' },
+      { id: 'USER_GUIDE', label: 'SYSTEM MANUAL', icon: 'manual' },
+      { id: 'MARKET_DISCOVERY', label: 'GENERATE LEADS', icon: 'target' },
+      { id: 'INTELLIGENCE_SCAN', label: 'INTELLIGENCE SCAN', icon: 'search' },
+      { id: 'MARKET_TRENDS', label: 'MARKET TRENDS', icon: 'trending' },
     ],
     "CRM & STRATEGY": [
-      { id: 'PROSPECT_DATABASE', label: 'LEAD DATABASE' },
-      { id: 'STRATEGY_CENTER', label: 'STRATEGY HUB' },
-      { id: 'PIPELINE', label: 'GROWTH PIPELINE' },
-      { id: 'ANALYTICS_HUB', label: 'BUSINESS ANALYTICS' },
+      { id: 'PROSPECT_DATABASE', label: 'LEAD DATABASE', icon: 'database' },
+      { id: 'STRATEGY_CENTER', label: 'STRATEGY HUB', icon: 'shield' },
+      { id: 'PIPELINE', label: 'GROWTH PIPELINE', icon: 'chart' },
+      { id: 'ANALYTICS_HUB', label: 'BUSINESS ANALYTICS', icon: 'graph' },
     ],
     "ANALYSIS CENTER": [
-      { id: 'BENCHMARK', label: 'BENCHMARKING' },
-      { id: 'VISUAL_ANALYSIS', label: 'VISUAL AUDIT' },
-      { id: 'STRATEGIC_REASONING', label: 'STRATEGIC LOGIC' },
-      { id: 'FACT_CHECK', label: 'FACT CHECKER' },
+      { id: 'BENCHMARK', label: 'BENCHMARKING', icon: 'ruler' },
+      { id: 'VISUAL_ANALYSIS', label: 'VISUAL AUDIT', icon: 'eye' },
+      { id: 'STRATEGIC_REASONING', label: 'STRATEGIC LOGIC', icon: 'brain' },
+      { id: 'FACT_CHECK', label: 'FACT CHECKER', icon: 'check' },
     ]
   },
   DESIGN: {
     "CREATIVE STUDIO": [
-      { id: 'VISUAL_STUDIO', label: 'VISUAL STUDIO' },
-      { id: 'BRAND_DNA', label: 'BRAND DNA' },
-      { id: 'MOCKUPS_4K', label: 'MOCKUP FORGE' },
+      { id: 'VISUAL_STUDIO', label: 'VISUAL STUDIO', icon: 'pen' },
+      { id: 'BRAND_DNA', label: 'BRAND DNA', icon: 'dna' },
+      { id: 'MOCKUPS_4K', label: 'MOCKUP FORGE', icon: 'monitor' },
     ],
     "ASSET ARCHITECTURE": [
-      { id: 'PRODUCT_SYNTHESIS', label: 'OFFER SYNTHESIS' },
-      { id: 'CONTENT_IDEATION', label: 'CONTENT IDEATION' },
-      { id: 'ASSET_LIBRARY', label: 'ASSET VAULT' },
+      { id: 'PRODUCT_SYNTHESIS', label: 'OFFER SYNTHESIS', icon: 'architect' },
+      { id: 'CONTENT_IDEATION', label: 'CONTENT IDEATION', icon: 'bulb' },
+      { id: 'ASSET_LIBRARY', label: 'ASSET VAULT', icon: 'vault' },
+      { id: 'FLASH_SPARK', label: 'FLASH SPARK', icon: 'spark' },
     ]
   },
   MEDIA: {
     "CINEMATIC FORGE": [
-      { id: 'VIDEO_PRODUCTION', label: 'VIDEO STUDIO' },
-      { id: 'VIDEO_PITCH', label: 'VEO VIDEO FORGE' },
-      { id: 'VIDEO_AUDIT', label: 'VIDEO AUDIT' },
-      { id: 'MOTION_LAB', label: 'MOTION LAB' },
+      { id: 'VIDEO_PRODUCTION', label: 'VIDEO STUDIO', icon: 'video' },
+      { id: 'VIDEO_PITCH', label: 'VEO VIDEO FORGE', icon: 'film' },
+      { id: 'VIDEO_AUDIT', label: 'VIDEO AUDIT', icon: 'search' },
+      { id: 'VIDEO_INSIGHTS', label: 'MEDIA INSIGHTS', icon: 'chart' },
+      { id: 'MOTION_LAB', label: 'MOTION LAB', icon: 'motion' },
     ],
     "SONIC ENGINEERING": [
-      { id: 'SONIC_STUDIO', label: 'SONIC STUDIO' },
-      { id: 'MEETING_NOTES', label: 'EXECUTIVE SCRIBE' },
+      { id: 'SONIC_STUDIO', label: 'SONIC STUDIO', icon: 'audio' },
+      { id: 'MEETING_NOTES', label: 'EXECUTIVE SCRIBE', icon: 'pen' },
     ]
   },
   OUTREACH: {
     "CAMPAIGN ENGINE": [
-      { id: 'CAMPAIGN_ORCHESTRATOR', label: 'CAMPAIGN ARCHITECT' },
-      { id: 'PRESENTATION_BUILDER', label: 'DECK ARCHITECT' },
-      { id: 'FUNNEL_MAP', label: 'FUNNEL MAPPER' },
+      { id: 'CAMPAIGN_ORCHESTRATOR', label: 'CAMPAIGN ARCHITECT', icon: 'map' },
+      { id: 'PRESENTATION_BUILDER', label: 'DECK ARCHITECT', icon: 'slides' },
+      { id: 'FUNNEL_MAP', label: 'FUNNEL MAPPER', icon: 'funnel' },
     ],
     "SALES PROTOCOL": [
-      { id: 'PROPOSALS', label: 'PROPOSAL BUILDER' },
-      { id: 'SEQUENCER', label: 'OUTREACH BUILDER' },
-      { id: 'ELEVATOR_PITCH', label: 'PITCH GENERATOR' },
-      { id: 'SALES_COACH', label: 'STRATEGIC COACH' },
+      { id: 'PROPOSALS', label: 'PROPOSAL BUILDER', icon: 'file' },
+      { id: 'SEQUENCER', label: 'OUTREACH BUILDER', icon: 'sequence' },
+      { id: 'ELEVATOR_PITCH', label: 'PITCH GENERATOR', icon: 'chat' },
+      { id: 'SALES_COACH', label: 'STRATEGIC COACH', icon: 'coach' },
     ],
     "VALUE MODELING": [
-      { id: 'ROI_CALCULATOR', label: 'VALUE PROJECTOR' },
-      { id: 'DEMO_SANDBOX', label: 'GROWTH SIMULATOR' },
-      { id: 'AI_CONCIERGE', label: 'NEURAL AGENT' },
+      { id: 'ROI_CALCULATOR', label: 'VALUE PROJECTOR', icon: 'calc' },
+      { id: 'DEMO_SANDBOX', label: 'GROWTH SIMULATOR', icon: 'sandbox' },
+      { id: 'AI_CONCIERGE', label: 'NEURAL AGENT', icon: 'bot' },
     ]
   },
   ADMIN: {
     "OPERATIONS": [
-      { id: 'AGENCY_PLAYBOOK', label: 'PLAYBOOK' },
-      { id: 'IDENTITY', label: 'IDENTITY' },
-      { id: 'BILLING', label: 'FINANCIALS' },
-      { id: 'AFFILIATE', label: 'PARTNERS' },
+      { id: 'AGENCY_PLAYBOOK', label: 'PLAYBOOK', icon: 'book' },
+      { id: 'IDENTITY', label: 'IDENTITY', icon: 'user' },
+      { id: 'BILLING', label: 'FINANCIALS', icon: 'billing' },
+      { id: 'AFFILIATE', label: 'PARTNERS', icon: 'link' },
     ],
     "SYSTEM NODES": [
-      { id: 'SETTINGS', label: 'GLOBAL SETTINGS' },
-      { id: 'SYSTEM_CONFIG', label: 'CORE CONFIG' },
-      { id: 'USAGE_STATS', label: 'RESOURCE STATS' },
-      { id: 'EXPORT_DATA', label: 'DATA MANAGEMENT' },
+      { id: 'SETTINGS', label: 'GLOBAL SETTINGS', icon: 'cog' },
+      { id: 'SYSTEM_CONFIG', label: 'CORE CONFIG', icon: 'code' },
+      { id: 'USAGE_STATS', label: 'RESOURCE STATS', icon: 'stats' },
+      { id: 'EXPORT_DATA', label: 'DATA MANAGEMENT', icon: 'export' },
+      { id: 'PROMPT_INTERFACE', label: 'PROMPT LAB', icon: 'terminal' },
     ],
     "TRACE LOGS": [
-      { id: 'ACTIVITY_LOGS', label: 'ACTIVITY TRACE' },
-      { id: 'TIMELINE', label: 'HISTORICAL TIMELINE' },
-      { id: 'NEXUS_GRAPH', label: 'NEXUS MAP' },
-      { id: 'TASK_MANAGER', label: 'TASK MANAGER' },
+      { id: 'ACTIVITY_LOGS', label: 'ACTIVITY TRACE', icon: 'list' },
+      { id: 'TIMELINE', label: 'HISTORICAL TIMELINE', icon: 'clock' },
+      { id: 'NEXUS_GRAPH', label: 'NEXUS MAP', icon: 'map' },
+      { id: 'TASK_MANAGER', label: 'TASK MANAGER', icon: 'check' },
     ]
   }
 };
@@ -125,7 +128,6 @@ export const LayoutZenith: React.FC<LayoutProps> = ({
 
   const handleModeClick = (mode: MainMode) => {
     setActiveMode(mode);
-    // Auto-select logical starting module per mode
     const firstGroup = Object.keys(MODULE_GROUPS[mode])[0];
     const firstMod = MODULE_GROUPS[mode][firstGroup][0].id;
     setActiveModule(firstMod);
@@ -133,7 +135,7 @@ export const LayoutZenith: React.FC<LayoutProps> = ({
 
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden bg-[#020617] text-slate-100 font-sans">
-      {/* ZENITH APEX HEADER */}
+      {/* APEX HEADER */}
       <header className="h-20 flex-none border-b border-slate-800 z-[100] flex items-center justify-between px-8 bg-[#030712]">
          <div className="flex items-center gap-4 w-80 shrink-0">
             <h1 className="text-xl font-black tracking-tight leading-none text-white uppercase select-none">
@@ -189,7 +191,7 @@ export const LayoutZenith: React.FC<LayoutProps> = ({
       </header>
 
       <div className="flex-1 flex overflow-hidden">
-         {/* ZENITH SIDEBAR */}
+         {/* SIDEBAR */}
          <aside className={`flex-none border-r border-slate-800 bg-[#030712] transition-all duration-300 flex flex-col z-50 ${isSidebarCollapsed ? 'w-[80px]' : 'w-[280px]'}`}>
             <div className="p-6 border-b border-slate-800 flex justify-center shrink-0">
                <button 
@@ -239,7 +241,7 @@ export const LayoutZenith: React.FC<LayoutProps> = ({
             </nav>
          </aside>
 
-         {/* ZENITH MAIN WORKSPACE */}
+         {/* MAIN WORKSPACE */}
          <div className="flex-1 flex flex-col overflow-hidden relative bg-[#020617]">
             <main className="flex-1 h-full overflow-y-auto custom-scrollbar p-10">
                <div className="max-w-[1600px] mx-auto min-h-full">
@@ -247,8 +249,8 @@ export const LayoutZenith: React.FC<LayoutProps> = ({
                </div>
             </main>
 
-            {/* ZENITH STATUS BAR */}
-            <footer className="h-10 border-t border-slate-800 bg-[#030712] flex items-center justify-between px-8 shrink-0 relative z-[60]">
+            {/* STATUS BAR */}
+            <footer className="h-10 flex-none border-t border-slate-800 bg-[#030712] flex items-center justify-between px-8 shrink-0 relative z-[60]">
                <div className="flex items-center gap-8">
                   <div className="flex items-center gap-3">
                      <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">STATUS:</span>
@@ -276,7 +278,6 @@ export const LayoutZenith: React.FC<LayoutProps> = ({
                </div>
             </footer>
 
-            {/* Background Aesthetic Layer */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] select-none">
                <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at center, #10b981 1px, transparent 0)', backgroundSize: '64px 64px' }}></div>
             </div>

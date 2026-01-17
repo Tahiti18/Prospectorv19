@@ -37,6 +37,7 @@ import { FunnelMap } from './components/workspaces/FunnelMap';
 import { AssetLibrary } from './components/workspaces/AssetLibrary';
 import { VideoProduction } from './components/workspaces/VideoProduction';
 import { SonicStudio } from './components/workspaces/SonicStudio';
+import { LiveScribe } from './components/workspaces/LiveScribe';
 import { ContentAnalysis } from './components/workspaces/ContentAnalysis';
 import { VisionLab } from './components/workspaces/VisionLab';
 import { CinemaIntel } from './components/workspaces/CinemaIntel';
@@ -48,6 +49,18 @@ import { AIConcierge } from './components/workspaces/AIConcierge';
 import { PitchGen } from './components/workspaces/PitchGen';
 import { MotionLab } from './components/workspaces/MotionLab';
 import { DemoSandbox } from './components/workspaces/DemoSandbox';
+import { FlashSpark } from './components/workspaces/FlashSpark';
+import { VoiceStrat } from './components/workspaces/VoiceStrat';
+import { SystemConfig } from './components/workspaces/SystemConfig';
+import { BillingNode } from './components/workspaces/BillingNode';
+import { AffiliateNode } from './components/workspaces/AffiliateNode';
+import { PromptInterface } from './components/workspaces/PromptInterface';
+import { TaskManager } from './components/workspaces/TaskManager';
+import { ModelBench } from './components/workspaces/ModelBench';
+import { TranslatorNode } from './components/workspaces/TranslatorNode';
+import { ExportNode } from './components/workspaces/ExportNode';
+// Fixed: Added missing import for ProposalDrafting component
+import { ProposalDrafting } from './components/workspaces/ProposalDrafting';
 import { Lead, MainMode, SubModule } from './types';
 import { db } from './services/automation/db';
 
@@ -80,117 +93,82 @@ export default function App() {
 
   const renderContent = () => {
     switch (activeModule) {
-      // --- RESEARCH ZONE ---
-      case 'EXECUTIVE_DASHBOARD': 
-        return <ExecutiveDashboard leads={leads} market={theater} onNavigate={handleNavigateSub} />;
-      case 'TRANSFORMATION_BLUEPRINT':
-        return <TransformationBlueprint onNavigate={handleNavigateSub} />;
+      // --- RESEARCH ZONE (RESTORED) ---
+      case 'EXECUTIVE_DASHBOARD': return <ExecutiveDashboard leads={leads} market={theater} onNavigate={handleNavigateSub} />;
+      case 'TRANSFORMATION_BLUEPRINT': return <TransformationBlueprint onNavigate={handleNavigateSub} />;
       case 'USER_GUIDE':
-      case 'SYSTEM_OVERVIEW':
-        return <UserGuide onNavigate={handleNavigateSub} />;
-      case 'MARKET_DISCOVERY': 
-        return <MarketDiscovery market={theater} onLeadsGenerated={(nl) => setLeads(prev => [...nl, ...prev])} />;
-      case 'AUTOMATED_SEARCH': 
-      case 'INTELLIGENCE_SCAN':
-        return <AutomatedSearch market={theater} onNewLeads={(nl) => setLeads(prev => [...nl, ...prev])} />;
-      case 'PROSPECT_DATABASE': 
-        return <ProspectDatabase leads={leads} lockedLeadId={lockedLeadId} onLockLead={handleLockLead} onInspect={handleLockLead} />;
+      case 'SYSTEM_MANUAL': return <UserGuide onNavigate={handleNavigateSub} />;
+      case 'MARKET_DISCOVERY': return <MarketDiscovery market={theater} onLeadsGenerated={(nl) => setLeads(prev => [...nl, ...prev])} />;
+      case 'INTELLIGENCE_SCAN': 
+      case 'AUTOMATED_SEARCH': return <AutomatedSearch market={theater} onNewLeads={(nl) => setLeads(prev => [...nl, ...prev])} />;
+      case 'PROSPECT_DATABASE': return <ProspectDatabase leads={leads} lockedLeadId={lockedLeadId} onLockLead={handleLockLead} onInspect={handleLockLead} />;
       case 'STRATEGY_CENTER': 
-      case 'STRATEGY_HUB':
-        return <StrategyCenter lead={lockedLead} onUpdateLead={db.saveLeads as any} onNavigate={handleNavigateSub} />;
-      case 'PIPELINE':
-        return <SellWorkspace activeModule="PIPELINE" leads={leads} lockedLead={lockedLead} />;
+      case 'STRATEGY_HUB': return <StrategyCenter lead={lockedLead} onUpdateLead={db.saveLeads as any} onNavigate={handleNavigateSub} />;
+      case 'PIPELINE': return <SellWorkspace activeModule="PIPELINE" leads={leads} lockedLead={lockedLead} />;
       case 'STRATEGIC_REASONING': 
-      case 'DEEP_LOGIC':
-        return <DeepLogic lead={lockedLead} />;
-      case 'MARKET_TRENDS': 
-        return <MarketTrends lead={lockedLead} />;
+      case 'DEEP_LOGIC': return <DeepLogic lead={lockedLead} />;
+      case 'MARKET_TRENDS': return <MarketTrends lead={lockedLead} />;
       case 'VISUAL_ANALYSIS':
-      case 'VISUAL_AUDIT':
-        return <VisionLab lead={lockedLead} />;
-      case 'VIDEO_INSIGHTS':
-      case 'CINEMA_INTEL':
-        return <CinemaIntel lead={lockedLead} />;
-      case 'CONTENT_ANALYSIS':
-        return <ContentAnalysis lead={lockedLead} />;
-      case 'BENCHMARK': 
-        return <BenchmarkNode lead={lockedLead} />;
-      case 'ANALYTICS_HUB': 
-        return <AnalyticsHub leads={leads} />;
-      case 'HEATMAP': 
-        return <Heatmap leads={leads} market={theater} />;
-      case 'FACT_CHECK':
-        return <FactCheck lead={lockedLead} />;
+      case 'VISUAL_AUDIT': return <VisionLab lead={lockedLead} />;
+      case 'CONTENT_ANALYSIS': return <ContentAnalysis lead={lockedLead} />;
+      case 'BENCHMARK': return <BenchmarkNode lead={lockedLead} />;
+      case 'ANALYTICS_HUB': return <AnalyticsHub leads={leads} />;
+      case 'HEATMAP': return <Heatmap leads={leads} market={theater} />;
+      case 'FACT_CHECK': return <FactCheck lead={lockedLead} />;
 
-      // --- DESIGN ZONE ---
-      case 'VISUAL_STUDIO': 
-        return <VisualStudio leads={leads} lockedLead={lockedLead} />;
-      case 'BRAND_DNA':
-        return <CreateWorkspace activeModule="BRAND_DNA" leads={leads} lockedLead={lockedLead} />;
-      case 'MOCKUPS_4K':
-        return <CreateWorkspace activeModule="MOCKUPS_4K" leads={leads} lockedLead={lockedLead} />;
-      case 'PRODUCT_SYNTHESIS': 
-        return <ProductSynth lead={lockedLead} />;
-      case 'ASSET_LIBRARY': 
-        return <AssetLibrary />;
+      // --- DESIGN ZONE (RESTORED) ---
+      case 'VISUAL_STUDIO': return <VisualStudio leads={leads} lockedLead={lockedLead} />;
+      case 'BRAND_DNA': return <CreateWorkspace activeModule="BRAND_DNA" leads={leads} lockedLead={lockedLead} />;
+      case 'MOCKUPS_4K': return <CreateWorkspace activeModule="MOCKUPS_4K" leads={leads} lockedLead={lockedLead} />;
+      case 'PRODUCT_SYNTHESIS': return <ProductSynth lead={lockedLead} />;
+      case 'CONTENT_IDEATION': 
+      case 'FLASH_SPARK': return <FlashSpark lead={lockedLead} />;
+      case 'ASSET_LIBRARY': return <AssetLibrary />;
 
-      // --- MEDIA ZONE ---
-      case 'VIDEO_PRODUCTION': 
-        return <VideoProduction lead={lockedLead} />;
-      case 'VIDEO_PITCH':
-        return <VideoPitch lead={lockedLead} />;
-      case 'VIDEO_AUDIT': 
-        return <VideoAI lead={lockedLead} />;
-      case 'MOTION_LAB':
-        return <MotionLab lead={lockedLead} />;
-      case 'SONIC_STUDIO': 
-        return <SonicStudio lead={lockedLead} />;
+      // --- MEDIA ZONE (RESTORED) ---
+      case 'VIDEO_PRODUCTION': return <VideoProduction lead={lockedLead} />;
+      case 'VIDEO_PITCH': return <VideoPitch lead={lockedLead} />;
+      case 'VIDEO_AUDIT': return <VideoAI lead={lockedLead} />;
+      case 'VIDEO_INSIGHTS': 
+      case 'CINEMA_INTEL': return <CinemaIntel lead={lockedLead} />;
+      case 'MOTION_LAB': return <MotionLab lead={lockedLead} />;
+      case 'SONIC_STUDIO': return <SonicStudio lead={lockedLead} />;
+      case 'MEETING_NOTES': return <LiveScribe />;
 
-      // --- OUTREACH ZONE ---
-      case 'CAMPAIGN_ORCHESTRATOR': 
-        return <CampaignOrchestrator leads={leads} lockedLead={lockedLead} onNavigate={handleNavigateSub} onLockLead={setLockedLeadId} onUpdateLead={db.saveLeads as any} />;
-      case 'PROPOSALS':
-        return <SellWorkspace activeModule="PROPOSALS" leads={leads} lockedLead={lockedLead} />;
-      case 'ROI_CALCULATOR':
-        return <ROICalc leads={leads} />;
-      case 'SEQUENCER':
-        return <Sequencer lead={lockedLead} />;
-      case 'PRESENTATION_BUILDER': 
-        return <DeckArch lead={lockedLead} />;
-      case 'AI_CONCIERGE':
-        return <AIConcierge lead={lockedLead} />;
-      case 'ELEVATOR_PITCH':
-        return <PitchGen lead={lockedLead} />;
-      case 'FUNNEL_MAP': 
-        return <FunnelMap lead={lockedLead} />;
-      case 'DEMO_SANDBOX':
-        return <DemoSandbox lead={lockedLead} />;
+      // --- OUTREACH ZONE (RESTORED) ---
+      case 'CAMPAIGN_ORCHESTRATOR': return <CampaignOrchestrator leads={leads} lockedLead={lockedLead} onNavigate={handleNavigateSub} onLockLead={setLockedLeadId} onUpdateLead={db.saveLeads as any} />;
+      case 'PROPOSALS': return <SellWorkspace activeModule="PROPOSALS" leads={leads} lockedLead={lockedLead} />;
+      case 'ROI_CALCULATOR': return <ROICalc leads={leads} />;
+      case 'SEQUENCER': return <Sequencer lead={lockedLead} />;
+      case 'PRESENTATION_BUILDER': return <DeckArch lead={lockedLead} />;
+      case 'AI_CONCIERGE': return <AIConcierge lead={lockedLead} />;
+      case 'ELEVATOR_PITCH': return <PitchGen lead={lockedLead} />;
+      case 'FUNNEL_MAP': return <FunnelMap lead={lockedLead} />;
+      case 'DEMO_SANDBOX': return <DemoSandbox lead={lockedLead} />;
+      case 'SALES_COACH': return <VoiceStrat lead={lockedLead} />;
+      case 'DRAFTING': return <ProposalDrafting lead={lockedLead} />;
 
-      // --- ADMIN ZONE ---
-      case 'SETTINGS': 
-        return <SettingsNode />;
-      case 'IDENTITY': 
-        return <IdentityNode />;
-      case 'BILLING':
-        return <ControlWorkspace activeModule="BILLING" />;
-      case 'TIMELINE': 
-        return <TimelineNode />;
-      case 'ACTIVITY_LOGS': 
-        return <ActivityLogs />;
-      case 'USAGE_STATS': 
-        return <UsageStats />;
-      case 'NEXUS_GRAPH': 
-        return <NexusGraph leads={leads} />;
+      // --- ADMIN ZONE (RESTORED) ---
+      case 'SETTINGS': return <SettingsNode />;
+      case 'IDENTITY': return <IdentityNode />;
+      case 'BILLING': return <BillingNode />;
+      case 'AFFILIATE': return <AffiliateNode />;
+      case 'SYSTEM_CONFIG': return <SystemConfig />;
+      case 'PROMPT_INTERFACE': return <PromptInterface lead={lockedLead} />;
+      case 'ACTIVITY_LOGS': return <ActivityLogs />;
+      case 'TIMELINE': return <ChronosNode />;
+      case 'NEXUS_GRAPH': return <NexusGraph leads={leads} />;
+      case 'TASK_MANAGER': return <TaskManager lead={lockedLead} />;
+      case 'USAGE_STATS': return <UsageStats />;
+      case 'MODEL_BENCH': return <ModelBench />;
+      case 'TRANSLATOR': return <TranslatorNode />;
+      case 'EXPORT_DATA': return <ExportNode leads={leads} />;
       
       default:
-        // Generic fallback for any other modules
-        if (activeMode === 'DESIGN') return <CreateWorkspace activeModule={activeModule} leads={leads} lockedLead={lockedLead} />;
-        if (activeMode === 'OUTREACH') return <SellWorkspace activeModule={activeModule} leads={leads} lockedLead={lockedLead} />;
-        if (activeMode === 'ADMIN') return <ControlWorkspace activeModule={activeModule} />;
         return (
-          <div className="flex flex-col items-center justify-center h-full py-40 opacity-20">
-            <span className="text-6xl mb-4">⚙️</span>
-            <p className="text-[10px] font-black uppercase tracking-[0.5em]">Initializing Operational Node: {activeModule}</p>
+          <div className="flex flex-col items-center justify-center h-full py-40 opacity-20 bg-[#020617]">
+            <span className="text-8xl mb-8">⚙️</span>
+            <p className="text-[12px] font-black uppercase tracking-[1em] text-slate-500">OPERATIONAL NODE OFFLINE: {activeModule}</p>
           </div>
         );
     }
@@ -199,12 +177,11 @@ export default function App() {
   const LayoutComponent = layoutMode === 'ZENITH' ? LayoutZenith : layoutMode === 'COMMAND' ? LayoutCommandCenter : Layout;
 
   return (
-    <div className="h-screen w-full overflow-hidden bg-[#020617]">
+    <div className="h-screen w-full overflow-hidden bg-[#020617] selection:bg-emerald-500/30 selection:text-white">
       <LayoutComponent
         activeMode={activeMode}
         setActiveMode={(m) => {
           setActiveMode(m);
-          // Standard first-module auto-routing
           if (m === 'RESEARCH') setActiveModule('EXECUTIVE_DASHBOARD');
           if (m === 'DESIGN') setActiveModule('VISUAL_STUDIO');
           if (m === 'MEDIA') setActiveModule('VIDEO_PRODUCTION');

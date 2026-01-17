@@ -1,3 +1,4 @@
+
 export type WorkspaceType = 'dashboard' | 'intelligence' | 'strategy' | 'creative' | 'campaign' | 'identity' | 'admin' | 'settings';
 
 // Narrowed to the 5 primary modes to satisfy Record types in layouts
@@ -18,7 +19,9 @@ export type SubModule =
   | 'CALENDAR' | 'ACTIVITY_LOGS' | 'SETTINGS' | 'NEXUS_GRAPH' | 'TIMELINE' 
   | 'TASK_MANAGER' | 'THEME' | 'USAGE_STATS' | 'TRANSFORMATION_BLUEPRINT'
   | 'PROMPT_INTERFACE' | 'MODEL_BENCH' | 'FACT_CHECK' | 'TRANSLATOR' | 'VIDEO_PITCH'
-  | 'ANALYTICS' | 'MODEL_TEST' | 'INTELLIGENCE_SCAN';
+  | 'ANALYTICS' | 'MODEL_TEST' | 'INTELLIGENCE_SCAN'
+  // Added missing SubModule types to satisfy switch cases and nav items
+  | 'FLASH_SPARK' | 'STRATEGY_HUB' | 'DEEP_LOGIC' | 'VISUAL_AUDIT' | 'CINEMA_INTEL';
 
 export type OutreachStatus = 'cold' | 'queued' | 'sent' | 'opened' | 'replied' | 'booked' | 'won' | 'lost' | 'paused';
 
