@@ -5,7 +5,6 @@ import { LayoutCommandCenter } from './components/LayoutCommandCenter';
 import { Layout } from './components/Layout';
 import { ToastContainer } from './components/ToastContainer';
 import { CommandPalette } from './components/CommandPalette';
-import { SecurityGateway } from './components/SecurityGateway';
 import { Dashboard } from './components/Dashboard';
 import { IntelligenceWorkspace } from './components/IntelligenceWorkspace';
 import { StrategyCenter } from './components/workspaces/StrategyCenter';
@@ -45,7 +44,6 @@ import { Lead, WorkspaceType, MainMode, SubModule } from './types';
 import { db } from './services/automation/db';
 
 export default function App() {
-  const [isArmed, setIsArmed] = useState(() => localStorage.getItem('pomelli_armed') === 'true');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [activeMode, setActiveMode] = useState<MainMode>('RESEARCH');
   const [activeModule, setActiveModule] = useState<SubModule>('EXECUTIVE_DASHBOARD');
@@ -59,11 +57,6 @@ export default function App() {
     const unsub = db.subscribe(setLeads);
     return () => unsub();
   }, []);
-
-  const handleArm = () => {
-    setIsArmed(true);
-    localStorage.setItem('pomelli_armed', 'true');
-  };
 
   const handleLockLead = (id: string) => {
     setLockedLeadId(id);
@@ -121,8 +114,6 @@ export default function App() {
         return <div className="p-20 text-center opacity-20 uppercase font-black tracking-widest">Node Development in Progress</div>;
     }
   };
-
-  if (!isArmed) return <SecurityGateway onArmed={handleArm} />;
 
   const LayoutComponent = layoutMode === 'ZENITH' ? LayoutZenith : layoutMode === 'COMMAND' ? LayoutCommandCenter : Layout;
 

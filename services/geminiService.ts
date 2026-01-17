@@ -1,3 +1,4 @@
+
 /* =========================================================
    GEMINI SERVICE – NATIVE PREVIEW OPTIMIZED
    ========================================================= */
@@ -7,10 +8,29 @@ import { Lead, AssetRecord, BenchmarkReport, VeoConfig, GeminiResult, EngineResu
 export type { Lead, AssetRecord, BenchmarkReport, VeoConfig, GeminiResult, EngineResult, BrandIdentity };
 
 const GEMINI_MODEL = "gemini-3-flash-preview";
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+// Fix: Removed top-level ai instance to follow guidelines for dynamic API key selection
+// and to ensure initialization happens right before API calls.
 
 export const SESSION_ASSETS: AssetRecord[] = [];
 export const PRODUCTION_LOGS: string[] = [];
+
+/* =========================================================
+   AUTH HELPERS
+   ========================================================= */
+
+// Fix: Added missing exports required by SecurityGateway and VerificationNode
+export function setStoredKeys(openRouterKey: string, kieKey: string): void {
+  localStorage.setItem('pomelli_or_key', openRouterKey);
+  localStorage.setItem('pomelli_kie_key', kieKey);
+}
+
+export function getStoredKeys(): { openRouter: string | null; kie: string | null } {
+  return {
+    openRouter: localStorage.getItem('pomelli_or_key'),
+    kie: localStorage.getItem('pomelli_kie_key')
+  };
+}
 
 /* =========================================================
    ASSET HELPERS
@@ -71,6 +91,8 @@ export function pushLog(message: string) {
 
 async function callGemini(prompt: string, config?: any): Promise<GeminiResult<string>> {
   try {
+    // Fix: Create fresh instance right before call to ensure up-to-date API key
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: GEMINI_MODEL,
       contents: prompt,
@@ -192,6 +214,8 @@ export async function extractBrandDNA(lead: Lead, url: string): Promise<BrandIde
 }
 
 export async function generateVisual(prompt: string, lead: Lead, sourceImage?: string): Promise<string | undefined> {
+  // Fix: Create fresh instance right before call
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash-image',
     contents: prompt
@@ -217,10 +241,6 @@ export async function generateOutreachSequence(lead: Lead): Promise<any[]> {
   try { return JSON.parse(result.text); } catch { return []; }
 }
 
-/**
- * Generates a structured high-ticket proposal.
- * Uses a deep structural JSON output for FormattedOutput.
- */
 export async function generateProposalDraft(lead: Lead): Promise<string> {
   const prompt = `
     GENERATE_PROPOSAL_V15: Create a high-fidelity strategic transformation proposal for ${lead.businessName}.
@@ -316,6 +336,8 @@ export async function translateTactical(text: string, lang: string): Promise<str
 }
 
 export async function analyzeVisual(base64: string, mimeType: string, prompt: string): Promise<string> {
+  // Fix: Create fresh instance right before call
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: GEMINI_MODEL,
     contents: { parts: [{ inlineData: { data: base64, mimeType } }, { text: prompt }] }
@@ -329,6 +351,8 @@ export async function analyzeVideoUrl(url: string, mission: string, leadId?: str
 }
 
 export async function generateVideoPayload(prompt: string, leadId?: string, image?: string, lastFrame?: string, config?: VeoConfig): Promise<string> {
+  // Fix: Create fresh instance right before call
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const op = await ai.models.generateVideos({
     model: 'veo-3.1-fast-generate-preview',
     prompt,
@@ -352,10 +376,6 @@ export async function generateAgencyIdentity(niche: string, region: string): Pro
   try { return JSON.parse(result.text); } catch { return {}; }
 }
 
-/**
- * Orchestrates a high-fidelity campaign package for a lead.
- * This is the primary intelligence engine for the Campaign Architect.
- */
 export async function orchestrateBusinessPackage(lead: Lead, assets: AssetRecord[]): Promise<any> {
   const prompt = `
     MISSION_ORCHESTRATION_V15: Perform exhaustive strategic architecture for ${lead.businessName}.
@@ -388,9 +408,9 @@ export async function orchestrateBusinessPackage(lead: Lead, assets: AssetRecord
                 type: Type.OBJECT,
                 properties: {
                   title: { type: Type.STRING },
-                  category: { type: Type.STRING, description: "e.g. MARKET_FORCES, SOLUTION, ROI, ROADMAP" },
+                  category: { type: Type.STRING },
                   bullets: { type: Type.ARRAY, items: { type: Type.STRING } },
-                  insight: { type: Type.STRING, description: "The deep 'why' behind this slide." }
+                  insight: { type: Type.STRING }
                 },
                 required: ["title", "bullets", "category"]
               }
@@ -405,7 +425,7 @@ export async function orchestrateBusinessPackage(lead: Lead, assets: AssetRecord
             type: Type.OBJECT,
             properties: {
               platform: { type: Type.STRING },
-              type: { type: Type.STRING, description: "e.g. HOOK, EDUCATION, PROOF" },
+              type: { type: Type.STRING },
               caption: { type: Type.STRING },
               visualDirective: { type: Type.STRING }
             },
@@ -420,7 +440,7 @@ export async function orchestrateBusinessPackage(lead: Lead, assets: AssetRecord
               title: { type: Type.STRING },
               description: { type: Type.STRING },
               conversionGoal: { type: Type.STRING },
-              frictionFix: { type: Type.STRING, description: "How AI removes the specific sales hurdle." }
+              frictionFix: { type: Type.STRING }
             },
             required: ["title", "description", "conversionGoal"]
           }
@@ -444,7 +464,7 @@ export async function orchestrateBusinessPackage(lead: Lead, assets: AssetRecord
               items: {
                 type: Type.OBJECT,
                 properties: {
-                  type: { type: Type.STRING, description: "e.g. CONNECTION_REQUEST, FOLLOW_UP" },
+                  type: { type: Type.STRING },
                   message: { type: Type.STRING }
                 }
               }
@@ -515,6 +535,8 @@ export async function fetchViralPulseData(niche: string): Promise<any[]> {
 }
 
 export async function queryRealtimeAgent(prompt: string): Promise<{ text: string, sources: any[] }> {
+  // Fix: Create fresh instance right before call
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const result = await ai.models.generateContent({
     model: GEMINI_MODEL,
     contents: prompt,
@@ -529,12 +551,6 @@ export async function queryRealtimeAgent(prompt: string): Promise<{ text: string
 export async function testModelPerformance(model: string, prompt: string): Promise<string> {
   return (await callGemini(prompt)).text;
 }
-
-export function getStoredKeys() {
-  return { openRouter: "PLATFORM_MANAGED", kie: "PLATFORM_MANAGED" };
-}
-
-export function setStoredKeys(orKey: string, kieKey: string) { return true; }
 
 export async function loggedGenerateContent(params: { module: string; contents: string | any; config?: any; }): Promise<string> {
   const prompt = typeof params.contents === 'string' ? params.contents : JSON.stringify(params.contents);
@@ -566,10 +582,6 @@ export async function simulateSandbox(lead: Lead, ltv: number, volume: number): 
   return (await callGemini(`Sandbox: LTV=${ltv}, Vol=${volume} for ${lead.businessName}`)).text;
 }
 
-/**
- * Generates an high-impact elevator pitch suite.
- * Returns structured JSON for FormattedOutput.
- */
 export async function generatePitch(lead: Lead): Promise<string> {
   const prompt = `
     TASK: Generate a definitive pitch script for ${lead.businessName}.
