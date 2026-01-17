@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { MainMode, SubModule } from '../types';
 
@@ -284,13 +283,13 @@ export const LayoutCommandCenter: React.FC<LayoutProps> = ({
                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   <div className="absolute right-0 top-full mt-2 w-48 bg-[#0b1021] border border-slate-800 rounded-xl shadow-2xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                     <button onClick={() => setLayoutMode('LEGACY')} className="w-full text-left px-4 py-3 text-[10px] font-bold text-slate-400 hover:text-white hover:bg-slate-900 transition-colors border-b border-slate-800">
-                        LEGACY (HORIZONTAL)
+                     <button onClick={() => setLayoutMode('ZEUS')} className={`w-full text-left px-4 py-3 text-[10px] font-bold border-b border-slate-800 transition-colors ${currentLayout === 'ZEUS' ? 'text-emerald-400 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:bg-slate-900'}`}>
+                        ZEUS (HORIZONTAL)
                      </button>
-                     <button onClick={() => setLayoutMode('COMMAND')} className="w-full text-left px-4 py-3 text-[10px] font-bold text-emerald-400 bg-emerald-900/10 hover:bg-emerald-900/20 transition-colors border-b border-slate-800">
+                     <button onClick={() => setLayoutMode('COMMAND')} className={`w-full text-left px-4 py-3 text-[10px] font-bold border-b border-slate-800 transition-colors ${currentLayout === 'COMMAND' ? 'text-emerald-400 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:bg-slate-900'}`}>
                         COMMAND (SIDEBAR)
                      </button>
-                     <button onClick={() => setLayoutMode('ZENITH')} className="w-full text-left px-4 py-3 text-[10px] font-bold text-slate-400 hover:text-white hover:bg-slate-900 transition-colors">
+                     <button onClick={() => setLayoutMode('ZENITH')} className={`w-full text-left px-4 py-3 text-[10px] font-bold transition-colors ${currentLayout === 'ZENITH' ? 'text-emerald-400 bg-emerald-900/10' : 'text-slate-400 hover:text-white hover:bg-slate-900'}`}>
                         ZENITH (TOP NAV)
                      </button>
                   </div>

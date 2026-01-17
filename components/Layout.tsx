@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { MainMode, SubModule } from '../types';
 
 interface LayoutProps {
@@ -17,207 +16,197 @@ interface LayoutProps {
   setLayoutMode: (mode: string) => void;
 }
 
-const STRATEGIC_CITIES = [
-  { rank: 1, city: "NEW YORK, USA" },
-  { rank: 2, city: "LONDON, UK" },
-  { rank: 3, city: "DUBAI, UAE" },
-  { rank: 4, city: "SINGAPORE" },
-  { rank: 5, city: "AUSTIN, USA" },
-  { rank: 6, city: "MIAMI, USA" },
-  { rank: 7, city: "SYDNEY, AUS" },
-  { rank: 8, city: "SAN FRANCISCO, USA" },
-  { rank: 9, city: "TORONTO, CAN" },
-  { rank: 10, city: "LOS ANGELES, USA" },
-  { rank: 11, city: "ZURICH, SWI" },
-  { rank: 12, city: "MELBOURNE, AUS" },
-  { rank: 13, city: "DUBLIN, IRE" },
-  { rank: 14, city: "CHICAGO, USA" },
-  { rank: 15, city: "DALLAS, USA" },
-  { rank: 16, city: "MANCHESTER, UK" },
-  { rank: 17, city: "SEATTLE, USA" },
-  { rank: 18, city: "VANCOUVER, CAN" },
-  { rank: 19, city: "BRISBANE, AUS" },
-  { rank: 20, city: "HOUSTON, USA" },
-  { rank: 21, city: "BOSTON, USA" },
-  { rank: 22, city: "ATLANTA, USA" },
-  { rank: 23, city: "HONG KONG" },
-  { rank: 24, city: "EDINBURGH, UK" },
-  { rank: 25, city: "DENVER, USA" },
-  { rank: 26, city: "SAN DIEGO, USA" },
-  { rank: 27, city: "TOKYO, JPN" },
-  { rank: 28, city: "BERLIN, GER" },
-  { rank: 29, city: "AMSTERDAM, NL" },
-  { rank: 30, city: "PARIS, FRA" }
-];
-
-const IconWrapper = ({ path, className = "w-5 h-5" }: { path: React.ReactNode, className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    {path}
-  </svg>
-);
+const STRATEGIC_CITIES = ["LONDON, UK", "NEW YORK, USA", "DUBAI, UAE", "LOS ANGELES, USA", "SINGAPORE", "SYDNEY, AUS"];
 
 const Icons = {
-  Operate: <IconWrapper path={<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />} />,
-  Create: <IconWrapper path={<path d="M12 19l7-7 3 3-7 7-3-3zM18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5zM2 2l5 5" />} />,
-  Studio: <IconWrapper path={<><path d="M23 7l-7 5 7 5V7z" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></>} />,
-  Sell: <IconWrapper path={<path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />} />,
-  Control: <IconWrapper path={<><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></>} />,
+  Home: (className: string) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>,
+  Search: (className: string) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>,
+  Manual: (className: string) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
+  Target: (className: string) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>,
+  Database: (className: string) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>,
+  Graph: (className: string) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>,
 };
 
-// Fix: Update SUB_MODULES to use valid MainMode and SubModule keys
-const SUB_MODULES: Record<MainMode, { id: SubModule; label: string }[]> = {
-  RESEARCH: [
-    { id: 'EXECUTIVE_DASHBOARD', label: 'Mission Control' },
-    { id: 'MARKET_DISCOVERY', label: 'Radar Recon' },
-    { id: 'AUTOMATED_SEARCH', label: 'Auto Crawl' },
-    { id: 'PROSPECT_DATABASE', label: 'Target Ledger' },
-    { id: 'PIPELINE', label: 'Pipeline' },
-    { id: 'STRATEGY_CENTER', label: 'War Room' },
-    { id: 'STRATEGIC_REASONING', label: 'Deep Logic' },
-    { id: 'WORKSPACE', label: 'Workspace' },
-    { id: 'MARKET_TRENDS', label: 'Viral Pulse' },
-    { id: 'VISUAL_ANALYSIS', label: 'Vision Lab' },
-    { id: 'CONTENT_ANALYSIS', label: 'Article Intel' },
-    { id: 'BENCHMARK', label: 'Benchmark' },
-    { id: 'ANALYTICS', label: 'Analytics' },
-    { id: 'ANALYTICS_HUB', label: 'Dominance Hub' },
-    { id: 'HEATMAP', label: 'Heatmap' },
-    { id: 'PROMPT_INTERFACE', label: 'Prompt Interface' },
-    { id: 'MODEL_BENCH', label: 'Model Test' },
-    { id: 'FACT_CHECK', label: 'Fact Check' },
-    { id: 'TRANSLATOR', label: 'Translator' }
-  ],
-  DESIGN: [
-    { id: 'VISUAL_STUDIO', label: 'Visual Studio' },
-    { id: 'BRAND_DNA', label: 'Brand DNA' },
-    { id: 'MOCKUPS_4K', label: '4K Mockups' },
-    { id: 'PRODUCT_SYNTHESIS', label: 'Product Synth' },
-    { id: 'CONTENT_IDEATION', label: 'Flash Spark' },
-    { id: 'ASSET_LIBRARY', label: 'Media Vault' }
-  ],
-  MEDIA: [
-    { id: 'VIDEO_PRODUCTION', label: 'Veo Pitch' },
-    { id: 'VIDEO_AUDIT', label: 'Video Audit' },
-    { id: 'VIDEO_INSIGHTS', label: 'Cinema Intel' },
-    { id: 'MOTION_LAB', label: 'Motion Lab' },
-    { id: 'SONIC_STUDIO', label: 'Sonic Studio' },
-    { id: 'MEETING_NOTES', label: 'Live Scribe' }
-  ],
-  OUTREACH: [
-    { id: 'CAMPAIGN_ORCHESTRATOR', label: 'Orchestrator' },
-    { id: 'PROPOSALS', label: 'Proposals' },
-    { id: 'ROI_CALCULATOR', label: 'ROI Calc' },
-    { id: 'SEQUENCER', label: 'Sequencer' },
-    { id: 'PRESENTATION_BUILDER', label: 'Deck Architect' },
-    { id: 'DEMO_SANDBOX', label: 'Demo Sandbox' },
-    { id: 'DRAFTING', label: 'Drafting' },
-    { id: 'SALES_COACH', label: 'Voice Strat' },
-    { id: 'AI_CONCIERGE', label: 'AI Concierge' },
-    { id: 'ELEVATOR_PITCH', label: 'Pitch Gen' },
-    { id: 'FUNNEL_MAP', label: 'Funnel Map' }
-  ],
-  ADMIN: [
-    { id: 'AGENCY_PLAYBOOK', label: 'Playbook' },
-    { id: 'BILLING', label: 'Billing' },
-    { id: 'AFFILIATE', label: 'Affiliate' },
-    { id: 'IDENTITY', label: 'Identity' },
-    { id: 'SYSTEM_CONFIG', label: 'OS Forge' },
-    { id: 'EXPORT_DATA', label: 'Export Data' },
-    { id: 'CALENDAR', label: 'Calendar' },
-    { id: 'ACTIVITY_LOGS', label: 'Prod Log' },
-    { id: 'SETTINGS', label: 'Settings' },
-    { id: 'NEXUS_GRAPH', label: 'Nexus Graph' },
-    { id: 'TIMELINE', label: 'Chronos' },
-    { id: 'TASK_MANAGER', label: 'Tasks' },
-    { id: 'THEME', label: 'Theme' },
-    { id: 'USAGE_STATS', label: 'Tokens' }
-  ]
-};
-
-// UNIFIED EMERALD CONFIG
-// Fix: Update MODE_CONFIG to use valid MainMode keys
-const MODE_CONFIG: Record<MainMode, { borderClass: string; bgClass: string; shadowClass: string; icon: React.ReactNode }> = {
-  RESEARCH: { borderClass: 'border-emerald-500', bgClass: 'bg-emerald-500/10', shadowClass: 'shadow-emerald-500/20', icon: Icons.Operate },
-  DESIGN: { borderClass: 'border-emerald-500', bgClass: 'bg-emerald-500/10', shadowClass: 'shadow-emerald-500/20', icon: Icons.Create },
-  MEDIA: { borderClass: 'border-emerald-500', bgClass: 'bg-emerald-500/10', shadowClass: 'shadow-emerald-500/20', icon: Icons.Studio },
-  OUTREACH: { borderClass: 'border-emerald-500', bgClass: 'bg-emerald-500/10', shadowClass: 'shadow-emerald-500/20', icon: Icons.Sell },
-  ADMIN: { borderClass: 'border-emerald-500', bgClass: 'bg-emerald-500/10', shadowClass: 'shadow-emerald-500/20', icon: Icons.Control },
+const MODULE_GROUPS: Record<MainMode, Record<string, { id: SubModule; label: string; icon?: (cn: string) => React.ReactNode }[]>> = {
+  RESEARCH: {
+    "CORE INSIGHTS": [
+      { id: 'EXECUTIVE_DASHBOARD', label: 'EXECUTIVE DASHBOARD', icon: Icons.Home },
+      { id: 'SYSTEM_OVERVIEW', label: 'SYSTEM OVERVIEW', icon: Icons.Graph },
+      { id: 'SYSTEM_MANUAL', label: 'SYSTEM MANUAL', icon: Icons.Manual },
+      { id: 'MARKET_DISCOVERY', label: 'GENERATE LEADS', icon: Icons.Target },
+      { id: 'INTELLIGENCE_SCAN', label: 'INTELLIGENCE SCAN', icon: Icons.Search },
+      { id: 'MARKET_TRENDS', label: 'MARKET TRENDS', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> },
+    ],
+    "CRM & STRATEGY": [
+      { id: 'PROSPECT_DATABASE', label: 'LEAD DATABASE', icon: Icons.Database },
+      { id: 'STRATEGY_CENTER', label: 'STRATEGY HUB', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> },
+      { id: 'PIPELINE', label: 'GROWTH PIPELINE', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg> },
+      { id: 'ANALYTICS_HUB', label: 'BUSINESS ANALYTICS', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> },
+    ],
+    "ANALYSIS CENTER": [
+      { id: 'BENCHMARK', label: 'BENCHMARKING', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg> },
+      { id: 'VISUAL_ANALYSIS', label: 'VISUAL AUDIT', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> },
+      { id: 'STRATEGIC_REASONING', label: 'STRATEGIC LOGIC', icon: (cn) => <svg className={cn} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> },
+    ]
+  },
+  DESIGN: { "Creative Suite": [{ id: 'VISUAL_STUDIO', label: 'VISUAL STUDIO' }, { id: 'MOCKUPS_4K', label: '4K MOCKUPS' }] },
+  MEDIA: { "Media Production": [{ id: 'VIDEO_PRODUCTION', label: 'VIDEO STUDIO' }] },
+  OUTREACH: { "Sales Ops": [{ id: 'CAMPAIGN_ORCHESTRATOR', label: 'CAMPAIGN FORGE' }] },
+  ADMIN: { "Management": [{ id: 'SETTINGS', label: 'SETTINGS' }] }
 };
 
 export const Layout: React.FC<LayoutProps> = ({ 
   children, activeMode, setActiveMode, activeModule, setActiveModule, onSearchClick, theater, setTheater, theme, toggleTheme, currentLayout, setLayoutMode
 }) => {
-  const activeConfig = MODE_CONFIG[activeMode];
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const groups = MODULE_GROUPS[activeMode] || {};
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 bg-[#020617] text-slate-100`}>
-      <header className={`h-24 border-b sticky top-0 z-50 backdrop-blur-xl transition-all duration-500 bg-[#0b1021]/95 border-slate-800`}>
-         <div className="max-w-[1920px] mx-auto px-10 h-full flex items-center justify-between relative">
-            <div className="flex items-center gap-4 w-64">
-               <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/20">
-                  <span className="text-white font-black text-3xl">P</span>
-               </div>
-               <div><h1 className="text-2xl font-bold leading-none text-white">Prospector OS</h1></div>
-            </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-4 p-2.5 rounded-2xl bg-slate-950/80 border border-slate-800/80 shadow-2xl backdrop-blur-md">
-               {(Object.keys(MODE_CONFIG) as MainMode[]).map((mode) => {
-                 const isActive = activeMode === mode;
-                 const config = MODE_CONFIG[mode];
-                 return (
-                   <button
-                     key={mode}
-                     onClick={() => setActiveMode(mode)}
-                     className={`relative px-10 py-4 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-3 ${
-                       isActive ? `text-white border-2 ${config.borderClass} ${config.bgClass} shadow-lg ${config.shadowClass}` : 'text-slate-400 hover:text-white border-2 border-transparent hover:bg-slate-900'
-                     }`}
-                   >
-                     <span className={isActive ? 'opacity-100 text-white scale-110' : 'opacity-60'}>{config.icon}</span>
-                     {mode}
-                   </button>
-                 );
-               })}
-            </div>
-            <div className="flex items-center gap-6 w-64 justify-end">
-               <div className="relative group">
-                  <button className="p-4 rounded-2xl transition-all border-2 bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-600">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                  </button>
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-[#0b1021] border border-slate-800 rounded-xl shadow-2xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                     <button onClick={() => setLayoutMode('LEGACY')} className="w-full text-left px-4 py-3 text-[10px] font-bold text-emerald-400 bg-emerald-900/10 hover:bg-emerald-900/20 transition-colors border-b border-slate-800">LEGACY</button>
-                     <button onClick={() => setLayoutMode('COMMAND')} className="w-full text-left px-4 py-3 text-[10px] font-bold text-slate-400 hover:text-white hover:bg-slate-900 transition-colors border-b border-slate-800">COMMAND</button>
-                     <button onClick={() => setLayoutMode('ZENITH')} className="w-full text-left px-4 py-3 text-[10px] font-bold text-emerald-400 bg-emerald-900/10 hover:bg-emerald-900/20 transition-colors">ZENITH</button>
+    <div className="flex flex-col h-screen overflow-hidden bg-[#020617] text-slate-100 font-sans">
+      {/* Top Navigation Bar */}
+      <header className="h-[80px] border-b border-slate-800 flex-none z-[100] bg-[#030712] flex items-center px-8">
+        <div className="flex items-center gap-4 w-[260px] shrink-0">
+          <h1 className="text-xl font-black tracking-tight leading-none text-white uppercase select-none">
+            PROSPECTOR <span className="text-emerald-500 italic">OS</span>
+          </h1>
+        </div>
+
+        <div className="flex-1 flex justify-center">
+          <nav className="flex items-center gap-2 p-1.5 rounded-full bg-[#0b1021] border border-slate-800 shadow-2xl">
+            {(Object.keys(MODULE_GROUPS) as MainMode[]).map((mode) => {
+              const isActive = activeMode === mode;
+              return (
+                <button
+                  key={mode}
+                  onClick={() => setActiveMode(mode)}
+                  className={`flex items-center gap-3 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
+                    isActive 
+                      ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
+                      : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-white animate-pulse' : 'bg-slate-700'}`}></span>
+                  {mode}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-4 w-[350px] justify-end shrink-0">
+           <button 
+             onClick={onSearchClick}
+             className="px-5 py-2.5 rounded-xl border border-slate-800 bg-[#0b1021] text-slate-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest flex items-center gap-2"
+           >
+             QUICK ACCESS <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">⌘K</span>
+           </button>
+           
+           <div className="relative group">
+              <select 
+                value={theater} 
+                onChange={(e) => setTheater(e.target.value)}
+                className="bg-[#0b1021] border border-slate-800 rounded-xl px-4 py-2.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest cursor-pointer outline-none appearance-none pr-10 focus:border-emerald-500/50"
+              >
+                <option value="" disabled>THEATER</option>
+                {STRATEGIC_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-500">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+           </div>
+        </div>
+      </header>
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* ZEUS SIDEBAR */}
+        <aside className={`flex-none border-r border-slate-800 bg-[#030712] transition-all duration-300 flex flex-col ${isSidebarCollapsed ? 'w-[80px]' : 'w-[260px]'}`}>
+          <div className="p-6 border-b border-slate-800 flex justify-center">
+            <button 
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="w-full py-2.5 rounded-lg bg-slate-900/40 border border-slate-800 text-[9px] font-black text-slate-500 uppercase tracking-[0.25em] hover:text-emerald-500 hover:border-emerald-500/30 transition-all"
+            >
+              {isSidebarCollapsed ? '→' : 'COLLAPSE INTERFACE'}
+            </button>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto custom-scrollbar py-8 space-y-12">
+             {Object.entries(groups).map(([groupName, modules]) => (
+               <div key={groupName} className="px-4 space-y-4">
+                  {!isSidebarCollapsed && (
+                    <h3 className="px-4 text-[11px] font-black text-slate-100 uppercase tracking-[0.2em] mb-4">
+                      {groupName}
+                    </h3>
+                  )}
+                  <div className="space-y-1">
+                    {/* Fix: Added explicit type cast for modules to avoid 'unknown' map error */}
+                    {(modules as any[]).map(mod => {
+                      const isActive = activeModule === mod.id;
+                      return (
+                        <button
+                          key={mod.id}
+                          onClick={() => setActiveModule(mod.id)}
+                          className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group ${
+                            isActive 
+                              ? 'bg-emerald-600/10 text-emerald-400 border border-emerald-500/30 shadow-lg' 
+                              : 'text-slate-500 hover:bg-slate-900/50 hover:text-slate-300'
+                          }`}
+                        >
+                          <div className={`shrink-0 ${isActive ? 'text-emerald-400' : 'text-slate-600 group-hover:text-slate-400'}`}>
+                            {mod.icon ? mod.icon('w-5 h-5') : <div className="w-5 h-5 bg-current opacity-20 rounded"></div>}
+                          </div>
+                          {!isSidebarCollapsed && (
+                            <span className={`text-[10px] font-black uppercase tracking-widest ${isActive ? 'text-white' : ''}`}>
+                              {mod.label}
+                            </span>
+                          )}
+                          {isActive && <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-emerald-500 rounded-l-full shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>}
+                        </button>
+                      );
+                    })}
                   </div>
                </div>
-               <button onClick={onSearchClick} className="p-4 rounded-2xl transition-all border-2 bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-600">
-                  <IconWrapper path={<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />} />
-               </button>
-               <div className="relative group">
-                 <select value={theater} onChange={(e) => setTheater(e.target.value)} className="bg-transparent text-sm font-bold uppercase focus:outline-none cursor-pointer border-none max-w-[1600px] truncate py-3 text-white">
-                    {STRATEGIC_CITIES.map(c => <option key={c.city} value={c.city}>{c.city}</option>)}
-                 </select>
-                 <div className="absolute -bottom-1 left-0 w-full h-px bg-slate-800 group-hover:bg-emerald-500 transition-colors"></div>
-               </div>
+             ))}
+          </nav>
+        </aside>
+
+        {/* MAIN WORKSPACE */}
+        <div className="flex-1 flex flex-col overflow-hidden relative">
+          <main className="flex-1 h-full overflow-y-auto custom-scrollbar bg-[#020617] p-8">
+            <div className="max-w-[1600px] mx-auto min-h-full flex flex-col">
+              {children}
             </div>
-         </div>
-      </header>
-      <div className={`border-b sticky top-24 z-40 transition-colors duration-500 shadow-md bg-[#05091a] border-slate-800 backdrop-blur-md`}>
-         <div className="max-w-[1920px] mx-auto px-10 py-5 flex items-center justify-start overflow-x-auto custom-scrollbar no-scrollbar">
-            <div className="flex gap-3">
-               {SUB_MODULES[activeMode].map((mod) => {
-                 const isActive = activeModule === mod.id;
-                 return (
-                   <button key={mod.id} onClick={() => setActiveModule(mod.id)} className={`px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${isActive ? `text-white ${activeConfig.borderClass} ${activeConfig.bgClass} shadow-lg ${activeConfig.shadowClass} scale-[1.02]` : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-white hover:border-slate-600 hover:bg-slate-800'}`}>
-                     {mod.label}
-                   </button>
-                 );
-               })}
+          </main>
+
+          {/* ZEUS FOOTER STATUS BAR */}
+          <footer className="h-10 border-t border-slate-800 bg-[#030712] flex items-center justify-between px-6 shrink-0 relative z-10">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">STATUS:</span>
+                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  OPERATIONAL
+                </span>
+              </div>
+              <span className="text-[9px] font-black text-slate-700 uppercase tracking-widest">V16.2 (CORPORATE)</span>
             </div>
-         </div>
+
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">ENGINE:</span>
+                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">GEMINI_3_FLASH</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">CLIENT:</span>
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">NO ACTIVE SELECTION</span>
+              </div>
+            </div>
+          </footer>
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none opacity-[0.03] select-none">
+             <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at center, #10b981 1px, transparent 0)', backgroundSize: '64px 64px' }}></div>
+          </div>
+        </div>
       </div>
-      <main className="relative min-h-[calc(100vh-180px)]">
-         <div className={`fixed inset-0 pointer-events-none opacity-[0.03] transition-colors duration-1000 ${activeConfig.bgClass.replace('/20', '/10')}`}></div>
-         {children}
-      </main>
     </div>
   );
 };

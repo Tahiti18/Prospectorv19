@@ -4,9 +4,10 @@ export type WorkspaceType = 'dashboard' | 'intelligence' | 'strategy' | 'creativ
 export type MainMode = 'RESEARCH' | 'DESIGN' | 'MEDIA' | 'OUTREACH' | 'ADMIN';
 
 export type SubModule = 
-  | 'EXECUTIVE_DASHBOARD' | 'MARKET_DISCOVERY' | 'AUTOMATED_SEARCH' | 'PROSPECT_DATABASE' 
-  | 'PIPELINE' | 'STRATEGY_CENTER' | 'STRATEGIC_REASONING' | 'WORKSPACE' | 'MARKET_TRENDS' 
-  | 'VISUAL_ANALYSIS' | 'CONTENT_ANALYSIS' | 'BENCHMARK' | 'ANALYTICS_HUB' | 'HEATMAP' 
+  | 'EXECUTIVE_DASHBOARD' | 'SYSTEM_OVERVIEW' | 'SYSTEM_MANUAL' | 'MARKET_DISCOVERY' 
+  | 'AUTOMATED_SEARCH' | 'PROSPECT_DATABASE' | 'PIPELINE' | 'STRATEGY_CENTER' 
+  | 'STRATEGIC_REASONING' | 'WORKSPACE' | 'MARKET_TRENDS' | 'VISUAL_ANALYSIS' 
+  | 'CONTENT_ANALYSIS' | 'BENCHMARK' | 'ANALYTICS_HUB' | 'HEATMAP' 
   | 'USER_GUIDE' | 'VISUAL_STUDIO' | 'BRAND_DNA' | 'MOCKUPS_4K' | 'PRODUCT_SYNTHESIS' 
   | 'CONTENT_IDEATION' | 'ASSET_LIBRARY' | 'VIDEO_PRODUCTION' | 'VIDEO_AUDIT' 
   | 'VIDEO_INSIGHTS' | 'MOTION_LAB' | 'SONIC_STUDIO' | 'MEETING_NOTES' 
@@ -17,7 +18,7 @@ export type SubModule =
   | 'CALENDAR' | 'ACTIVITY_LOGS' | 'SETTINGS' | 'NEXUS_GRAPH' | 'TIMELINE' 
   | 'TASK_MANAGER' | 'THEME' | 'USAGE_STATS' | 'TRANSFORMATION_BLUEPRINT'
   | 'PROMPT_INTERFACE' | 'MODEL_BENCH' | 'FACT_CHECK' | 'TRANSLATOR' | 'VIDEO_PITCH'
-  | 'ANALYTICS' | 'MODEL_TEST';
+  | 'ANALYTICS' | 'MODEL_TEST' | 'INTELLIGENCE_SCAN';
 
 export type OutreachStatus = 'cold' | 'queued' | 'sent' | 'opened' | 'replied' | 'booked' | 'won' | 'lost' | 'paused';
 
@@ -139,7 +140,6 @@ export interface GeminiResult<T> {
   error?: { message: string };
 }
 
-// Added missing OutreachAssets interface
 export interface OutreachAssets {
   emailOpeners: string[];
   fullEmail: string;
@@ -157,7 +157,6 @@ export interface EngineResult {
     reachability: string;
     grades: { A: string; B: string; C: string };
   };
-  // Updated assets type and added groundingSources for RadarRecon
   assets: OutreachAssets;
   groundingSources?: Array<{ uri: string; title: string }>;
 }
